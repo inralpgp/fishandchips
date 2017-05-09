@@ -1,0 +1,62 @@
+
+R version 2.10.1 (2009-12-14)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R est un logiciel libre livré sans AUCUNE GARANTIE.
+Vous pouvez le redistribuer sous certaines conditions.
+Tapez 'license()' ou 'licence()' pour plus de détails.
+
+R est un projet collaboratif avec de nombreux contributeurs.
+Tapez 'contributors()' pour plus d'information et
+'citation()' pour la façon de le citer dans les publications.
+
+Tapez 'demo()' pour des démonstrations, 'help()' pour l'aide
+en ligne ou 'help.start()' pour obtenir l'aide au format HTML.
+Tapez 'q()' pour quitter R.
+
+> setwd("/media/DATA/Fish_and_Chips/Downloads-2011.09.22/test/E-TABM-478-A-MEXP-664/") 
+> nomInput = "temp.txt" 
+> nomFile = "E-TABM-478-A-MEXP-664.norm.knn.txt" 
+> source("/media/DATA/Fish_and_Chips/Dataset_insertion_process/2-clusterisationEDC/outliers_correction/new_knn.R") 
+[1] "input matrix : temp.txt"
+[1] "output matrix : E-TABM-478-A-MEXP-664.norm.knn.txt"
+[1] "Dimension de la matrice : "
+[1] 36278    19
+[1] "Filtrage des NA"
+[1] "Dimension de la matrice : "
+[1] 36278    19
+[1] "KNN..."
+
+Exécution arrêtée
+
+R version 2.10.1 (2009-12-14)
+Copyright (C) 2009 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R est un logiciel libre livré sans AUCUNE GARANTIE.
+Vous pouvez le redistribuer sous certaines conditions.
+Tapez 'license()' ou 'licence()' pour plus de détails.
+
+R est un projet collaboratif avec de nombreux contributeurs.
+Tapez 'contributors()' pour plus d'information et
+'citation()' pour la façon de le citer dans les publications.
+
+Tapez 'demo()' pour des démonstrations, 'help()' pour l'aide
+en ligne ou 'help.start()' pour obtenir l'aide au format HTML.
+Tapez 'q()' pour quitter R.
+
+> setwd("/media/DATA/Fish_and_Chips/Downloads-2011.09.22/test/E-TABM-478-A-MEXP-664/") 
+> nomInput = "temp.txt" 
+> nomFile = "E-TABM-478-A-MEXP-664.norm.knn.txt" 
+> source("/media/DATA/Fish_and_Chips/Dataset_insertion_process/2-clusterisationEDC/outliers_correction/new_knn.R") 
+[1] "input matrix : temp.txt"
+[1] "output matrix : E-TABM-478-A-MEXP-664.norm.knn.txt"
+[1] "Dimension de la matrice : "
+[1] 36278    19
+[1] "Filtrage des NA"
+[1] "Dimension de la matrice : "
+[1] 36278    19
+[1] "KNN..."
+
+Exécution arrêtée

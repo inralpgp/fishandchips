@@ -1,0 +1,4 @@
+DBD::mysql::st execute failed: Duplicate entry 'SRP888888' for key 'directory_UNIQUE' at ./4-cluster_integration/4-cluster_integration_RNAseq.pl line 43, <GO> line 1.
+sed: impossible d'éditer ../WorkingDirectoryInsertionProcess/SRP888888/cluster/annotation/formated_result: ce n'est pas un fichier régulier
+sed: impossible d'éditer ../WorkingDirectoryInsertionProcess/SRP888888/cluster/annotation/formated_result: ce n'est pas un fichier régulier
+rm: impossible de supprimer '../WorkingDirectoryInsertionProcess/SRP888888/cluster/annotation/result/*': Aucun fichier ou dossier de ce type

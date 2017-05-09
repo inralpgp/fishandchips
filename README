@@ -1,0 +1,56 @@
+#########################################################################################
+###		Structure of the datasets.txt file (Provisional). Format harmonization to come
+#########################################################################################
+
+#  microarray
+	#$1 : GSE
+	#$2 : GPL
+	#$3 : Directory (GSE-GPL, file)
+	#$4 : Title
+	#$5 : Summary
+	#$6 : Design
+	#$7 : PubMed ID
+	#$8 : GPL row count
+	#$9 : channel count
+	#$10 : Sample number
+	#$11 : Sample species
+
+#  RNAseq
+	#$1 : SRP
+	#$2 : title
+	#$3 : specie
+
+
+##########################################################################################
+###		To launch the Trinity Pipeline to assembly assemble the transcipts from the read and 
+###		obtain normalized expression matrix, for each RNAseq datasets
+##########################################################################################
+
+	Pipeline_AnalyseRNAseq_Trinity_V3.pl  datasets.txt <working_directory>
+
+##########################################################################################
+###		To launch Annotation process
+##########################################################################################
+
+#  microarray
+	perl launcher_microArray.pl
+
+#  RNAseq
+	perl launcher_RNAseq.pl
+
+
+##########################################################################################
+###		To launch data Insertion process 
+##########################################################################################
+  
+
+  WARNING : you have to specified host, user and password in the scripts
+
+  WARNING : you have to specified the working directory ans the dataset.txt file in the launcher.
+
+#  microarray
+	perl Fish_and_Chip-LAUNCHING_INTEGRATION_PROCESS_microArray.pl
+
+#  RNAseq
+	perl Fish_and_Chip-LAUNCHING_INTEGRATION_PROCESS_RNAseq.pl
+

@@ -1,0 +1,468 @@
+/* css Zen Garden submission 175 - 'Business Style', by Gunta Klavina, http://www.klavina.com/ */
+/* css released under Creative Commons License - http://creativecommons.org/licenses/by-nc-sa/1.0/  */
+/* All associated graphics copyright 2005, Gunta Klavina */
+/* Added: July 9th, 2005 */
+
+/* IMPORTANT */
+/* This design is not a template. You may not reproduce it elsewhere without the 
+   designer's written permission. However, feel free to study the CSS and use 
+   techniques you learn from it elsewhere. */
+
+/*
+Hierarchie des balises :
+	intro >	pageHeader  
+		  > quickSummary
+
+	supportingText  > participation
+					> login
+					> requierements
+					> footer
+*/
+
+body
+    {
+    margin: 0;
+    padding: 0;
+    color: #333;
+    font: 13px Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+    background: #029350;
+    text-align: center;
+    }
+a
+    {
+    color: #044F90;	/* couleur des liens */
+    }
+a:hover
+    {
+    color: #D60808;
+    }
+acronym
+    {
+    border: none;
+    }
+
+table { 
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #000000;
+	/*table-layout: fixed;*/
+	width: 750px;	/* previous: 645px */
+	margin-bottom: 2ex;
+	margin-top: 2ex;
+	padding: 2px 2px 2px 2px; 
+	font: 11px Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+}
+
+td { 
+	border-style: solid;
+	border-width: 1px;
+	border-color: #000000;
+	padding: 1px 2px 2px 1px; 
+	text-align: center;
+}
+
+th { 
+	border-style: solid;
+	border-width: 1px;
+	border-color: #000000;
+	padding: 8px 2px 5px 2px; 
+	text-align: center;
+	font-weight: bold;
+	
+}
+
+
+#dataset{
+	width: 30px;
+}
+#cluster{
+	width: 30px;
+}
+#pvalue{
+	width: 30px;
+}
+#ratio{
+	width: 25px;
+}
+#species{
+	width: 30px;
+}
+#overlap{
+	width: 55px;
+}
+#goid{
+	width: 35px;
+}
+#goterm{
+	width: 35px;
+}
+#annot{
+	width: 55px;
+}
+
+#input{
+	width: 55px;
+}
+#valid{
+	width: 30px;
+}
+#orthologs{
+	width: 30px;
+}
+#symbol{
+	width: 55px;
+}
+#name{
+	width: 100px;
+}
+#DSid{
+	width: 105px;
+}
+#quality{
+	width: 85px;
+}
+
+#change_quality
+    {
+    text-align: right;
+    }
+
+#participation h3 span, #lresources h3.resources span, #larchives h3.links span, #lselect h3.select span, #datasets h3 span, #view1 h3 span, #view2 h3 span, #view3 h3 span, #compare h3 span
+    {
+    display:none;
+    }
+
+#container
+    {
+    margin: 0 auto;
+    width: 1000px;	/* previous: 880px */
+    position: relative;
+    background: #fff;
+    padding: 0 10px 0 10px;
+    text-align: left;
+    }
+* html #container
+    {
+    width: 744px;
+    }
+
+#pageHeader
+    {
+    position: absolute;
+    top: 25px;
+    left: 40px;
+    }
+h1
+    {
+    /*background: url("images/Titre.gif") no-repeat;
+    width: 156px;
+    height: 28px;*/
+	font: 28px Trebuchet MS;
+	font-weight: bold;
+	color: #029350;
+    overflow: hidden;
+    margin: 0;
+    }
+h1 span
+    {
+    display: none;
+    }
+h2
+    {
+    font-size: 12px;
+    margin: 0;
+    }
+
+#quickSummary
+    {
+    padding-top: 85px;
+	padding-left: 25px;
+    }
+#quickSummary .p2
+    {
+    font-size: 12px;
+    position: absolute;
+    top: 65px;
+    right: 20px;
+    margin: 0;
+    }
+#container #intro #quickSummary .p1
+    {
+    font-size: 11px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 171px;
+    background: url("images/banniere.png") no-repeat;
+    width: 724px;
+    color: #fff;
+    font: 12px/150% Trebuchet MS;
+    }
+#container #intro #quickSummary .p1  span
+    {
+    padding: 30px 530px 0 30px;
+    display: block;
+    margin: 0;
+    font: 12px/150% Trebuchet MS;
+    }
+
+#supportingText
+    {
+    margin: 0 20px 0 243px;
+    }
+#supportingText p
+    {
+    line-height: 150%;
+    margin: 10px 0 10px 0;
+    }
+#participation h3, #datasets h3, #view1 h3, #view2 h3, #view3 h3, #compare h3, #statistics h1
+    {
+    width: 250px;
+    height: 34px;
+    margin: 40px 0 10px 0;
+	font: Trebuchet MS;
+    }
+#participation h3
+    {
+    /*background: url("images/web_tool.gif") no-repeat;*/
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    }
+#compare h3
+    {
+    /*background: url("images/compare.gif") no-repeat;*/
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    }
+	
+#datasets h3
+    {
+    /*background: url("images/datasets.gif") no-repeat;*/
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    }
+
+#view1 h3
+    {
+    /*background: url("images/rawdata.gif") no-repeat;*/
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    }
+#view2 h3
+    {
+    /*background: url("images/normdata.gif") no-repeat;*/
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    }
+#view3 h3
+    {
+    /*background: url("images/analyzeddata.gif") no-repeat;*/
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    }
+
+#linkList
+    {
+    position: absolute;
+    top: 295px;
+    left: 0;
+    width: 210px;
+    }
+#lselect ul, #larchives ul, #lresources ul, #login ul, #output ul
+    {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 40px;
+    }
+/*
+#lselect ul li a
+    {
+    text-decoration: underline;
+    display: block;
+    font-size: 13px;
+    }
+#lselect ul li.c, #lselect ul li a.c
+    {
+    display: inline;
+    font-size: 12px;
+    color: #333;
+    }
+#lselect ul li a.c
+    {
+    text-decoration: none;
+    }
+#lselect ul li a.c:hover
+    {
+    color: #D60808;
+    }
+#lselect ul li
+    {
+    font-size: 12px;
+    border-bottom: 1px solid #E6EEF0;
+    }
+*/
+
+#linkList #lselect ul li
+    {
+    font-size: 13px;
+    border-bottom: 1px solid #E6EEF0;
+    display: block;
+    padding: 5px 0;
+    }
+#linkList #larchives ul li
+    {
+    font-size: 13px;
+    border-bottom: 1px solid #E6EEF0;
+    display: block;
+    padding: 5px 0;
+    }
+#linkList #lresources ul li
+    {
+    font-size: 13px;
+    border-bottom: 1px solid #E6EEF0;
+    display: block;
+    padding: 5px 0;
+    }
+
+
+#lselect h3.select
+    {
+    /*background: url("images/tool.gif") no-repeat;*/
+	text-indent: 7px;
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    width: 109px;
+    height: 30px;
+    margin: 30px 0 5px 40px;
+    }
+#lselect h3.madtools
+    {
+    /*background: url("images/madtools.gif") no-repeat;*/
+	text-indent: 7px;
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    width: 109px;
+    height: 30px;
+    margin: 30px 0 5px 40px;
+    }
+
+#lresources h3.resources
+    {
+    /*background: url("images/resources.gif") no-repeat;*/
+	text-indent: 7px;
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    width: 109px;
+    height: 30px;
+    margin: 30px 0 5px 40px;
+    }
+#larchives h3.links
+    {
+    /*background: url("images/links.gif") no-repeat;*/
+	text-indent: 7px;
+	font: 18px Trebuchet MS;
+	/*font-weight: bold;*/
+	color: #029350;
+    width: 69px;
+    height: 30px;
+    margin: 30px 0 5px 40px;
+    }
+
+#footer
+    {
+    background: url("images/footer.gif") no-repeat;
+    color: #fff;
+    height: 48px;
+    text-align: right;
+    padding: 0 115px 0 0;
+	margin: 15px 0 0 0;
+    line-height: 26px;
+    font-size: 11px;
+    }
+#footer  a 
+    {
+    color: #fff;
+    text-decoration: none;
+    }
+#footer a:hover
+    {
+    text-decoration: underline;
+    }
+	
+#labelFoot{
+	margin: 0px 50px 0 0;
+}
+	
+#logos
+    {
+    height: 48px;
+    padding: 0 10px 0 0px;
+	margin: 70px 0px 0px 0px;
+    }
+
+#logos a
+    {
+    color: #fff;
+    text-decoration: none;
+    }
+
+a img{
+	border-style: none;
+}
+
+img.result{
+height: 75%; 
+width: 75%; 
+}
+
+#searchGO {
+	margin-top: -30px;
+	margin-left: 250px;
+	width: 200px;
+}
+
+
+#send {
+	padding: 20px 0 0px 0px;
+}
+
+fieldset {
+	margin: 5px 0 5px 0;
+}
+
+.blanc {
+	height: 50px;
+}
+
+.rouge{
+	color: red;
+}
+.rouge a{
+	color: red;
+}
+
+#filter {
+	margin-top: -30px;
+	margin-left: 180px;
+	width: 200px;
+}
+
+#new {
+	margin-top: 40px;
+	margin-left: -260px;
+	
+}
+
+#hello {
+	padding: 0 0 0px 40px;
+}
+
