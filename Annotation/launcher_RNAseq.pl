@@ -31,6 +31,11 @@ my %species_list=
 	#"Gillichthys mirabilis"=>0
 );
 
+# Pour parser les données relatives aux génomes de référence ENSEMBL
+system("perl", "creating_cDNA_gDNA_DB.pl");
+
+# Pour parser les données relatives aux RefSeq présente sur le NCBI
+system("perl", "creating_refseq_DB.pl");
 
 
 foreach $species(sort keys %species_list)
