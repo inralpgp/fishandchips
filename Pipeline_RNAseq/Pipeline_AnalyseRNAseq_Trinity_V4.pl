@@ -1,18 +1,4 @@
 #!/usr/bin/perl -w
-# Copyright {2017} INRA (Institut National de Recherche Agronomique - FRANCE) 
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 # Launcher pipeline Trinity
 # my $downDir="../WorkingDirectoryInsertionProcess";
@@ -26,6 +12,7 @@
 my $self = {};
 bless $self;
 my @list = () ;
+my @Mylist=();
 my $dir=$ARGV[1];
 my $dataset_list=$ARGV[0];
 $self->{previousSrp}="";
@@ -35,17 +22,51 @@ open(GO, $dataset_list) or die "impossible d'ouvrir $dataset_list ! \n" ;
 while (<GO>)
 {
 	if ($_ eq "" || $_ =~ m/^#/){											### ne prends pas en compte les lignes vides
+		print " NE SERA PAS TRAITER !!!\n";
+		print $_."\n";
 		next;
 	}
 	else{
+		print " ON VA ANALYSER CES DATAS  !!\n";
 		chomp;
-		print "\n\n".$_."\n";
-		$_ =~ /([^\t]*)\t[^\t]*\t[^\t]*.*/ ;
-		print $1."\n";
-		push(@list, "$1");
-		#$1 : SRP
-		#$2 : study
-		#$3 : specie
+		print $_."\n";
+
+		$_ =~ /([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*).*/ ;
+
+		#$0 : path
+		#$1 : GSE
+		#$2 : GPL
+		#$3 : Directory (GSE-GPL, file)
+		#$4 : Title
+		#$5 : Summary
+		#$6 : Design
+		#$7 : PubMed ID
+		#$8 : GPL row count
+		#$9 : channel count
+		#$10 : Sample number
+		#$11 : Sample species
+
+		#print $0."***\n".$1."\n".$2."\n".$3."\n".$4."\n".$5."\n".$6."\n".$7."\n".$8."\n".$9."\n".$10."****\n".$11."***\n\n\n";
+
+		my $dataset_number = $1 ;		
+		my $gpl_number=$2;
+		my $directory=$3;
+		my $title=$4;
+		my $summary=$5;
+		my $design=$6;
+		my $pubmed_id=$7;
+		my $row_count=$8;
+		my $channel_count=$9;
+		my $sample_number=$10;
+		my $sample_species=$11;
+
+		$sample_species=~s/ /_/;
+
+		print $dataset_number."\n";
+		push(@list, "$dataset_number");
+
+		system("ln -s $dir/$file/Assembly_Trinity/Trinity.fasta ~/bin/Fish_And_Chips_AAJ/Part2/Annotations/Species_to_annotate/$sample_species/$sample_species/_S_$dataset_number/_E_mRNA.fasta");
+
 	}
 }
 close GO ;
@@ -57,10 +78,6 @@ foreach $srp (@list){
 	chomp$srp;
 	print "--------------------------------> pour chaque SRP \n";
 	print $srp."\n";
-
-	#$gse=~s/(-A-.+)|(-GPL.+)//;
-	#$gse=~s/a$|b$|c$|d$//;
-	#my $self->{type};
 
 	if ($self->{previousSrp} eq ""){
 		print "pas de precedent\n";
@@ -121,23 +138,29 @@ sub pipeline{
 	###########################################################################################
 	### 1/ alignment et assemblage
 	my $dossier = "$dir/$file/RAW_data/";
+	my $dossierO = "$dir/$file/RAW_data/";
 	print $dir."\n";
 	print $dossier."\n";
 	opendir DIR , $dossier;
+	opendir DIRO, $dossierO;
 
-	my @list1=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\.fastq\.gz$/} readdir DIR;	
-	my @list2=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\.fastq\.gz$/} readdir DIR;
+	#my @list1=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\.fastq\.gz$/} readdir DIR;	
+	#my @list2=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\.fastq\.gz$/} readdir DIR;
 	
-	#my @list1=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\.fastq$/} readdir DIR;
-	#my @list2=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\.fastq$/} readdir DIR;
+	my @list1=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\.fastq$/} readdir DIR;
+	my @list2=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\.fastq$/} readdir DIRO;
+
+	print join ("\t",sort @list1)."\n";
+	print join ("\t",sort @list2)."\n";
 	
 	my @fulllist = (@list1,@list2);
+	my $lengthlist = scalar(@fulllist);
 	
-	#print join ("\t",@fulllist)."\n";
-	#print "scalar : ".scalar(@list1)."\t".scalar(@list2)."\n";
+	print join ("\t",@fulllist)."\n";
+	print "scalar : ".scalar(@list1)."\t".scalar(@list2)."\n";
 	if (scalar(@list1)>0 and scalar(@list2)>0){
 		#print scalar(@list1)."\t".scalar(@list2)."\n";
-		$self->{type}="--left ".$dossier."".join(','.$dossier,@list1)." --right ".$dossier."".join(','.$dossier,@list2)." ";
+		$self->{type}="--left ".$dossier."".join(','.$dossier,sort(@list1))." --right ".$dossier."".join(','.$dossier,sort(@list2))." ";
 		$self->{clip}="/home/ajosselin/work/data/TruSeq3-PE.fa";
 
 	}
@@ -146,7 +169,8 @@ sub pipeline{
 		$self->{type}="--single ".$dossier."".join(','.$dossier,@list1)." ";
 		$self->{clip}="/home/ajosselin/work/data/TruSeq3-SE.fa";
 	}
-	close DIR; 
+	close DIR;
+	close DIRO; 
 
 	open(CMDTRINITY, ">$dir/$file/1_Trinity.sh");
 	printf(CMDTRINITY "#!/bin/bash\n");
@@ -154,7 +178,7 @@ sub pipeline{
 	printf(CMDTRINITY "#\$ -cwd\n");
 	printf(CMDTRINITY "#\$ -V\n");
 	## job require at least xxG of memory free on compute node
-	printf(CMDTRINITY "#\$ -l mem=8G\n");
+	printf(CMDTRINITY "## -l mem=8G\n");
 	#job must be killed if memory exceed xxG
 	printf(CMDTRINITY "#\$ -l h_vmem=100G\n");
 	#join SGE output files (.o123 & .e123) in .o only
@@ -166,6 +190,8 @@ sub pipeline{
 	printf(CMDTRINITY "#\$ -m bea\n");
 
 	#printf(CMDTRINITY "#\$ -hold_jid test888888\n");
+
+	printf(CMDTRINITY "module load bioinfo/Java7\n");
 
 	printf(CMDTRINITY "Trinity --seqType fq ");
 	printf(CMDTRINITY "--JM 12G --CPU 8 ");
@@ -211,20 +237,31 @@ sub pipeline{
 
 	###########################################################################################
 	### 3/Evaluation Assemblage
-	my $dossier2 = $TrinityOutDir;
-	opendir DIR2 , $dossier2;
-	my @trimlist1=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\..*\.qtrim\.fq$/} readdir DIR2;
-	my @trimlist2=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\..*\.qtrim\.fq$/} readdir DIR2;
-	if (scalar(@trimlist1)>0 and scalar(@trimlist2)>0){
-		$self->{trimfiles}="-1 ".$TrinityOutDir."".join(','.$TrinityOutDir,@trimlist1)." -2 ".$TrinityOutDir."".join(','.$TrinityOutDir,@trimlist2)." ";
-		$self->{clip}="/home/ajosselin/work/data/TruSeq3-PE.fa";
 
+	if (scalar(@list1)>0 and scalar(@list2)>0){
+	#if (scalar(@trimlist1)>0 and scalar(@trimlist2)>0){
+		my $dossier2 = $TrinityOutDir;
+		my $dossier21= $TrinityOutDir;
+		opendir DIR2 , $dossier2;
+		opendir DIR21, $dossier21;
+		my @trimlist1=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\.fastq\.P\.qtrim\.gz$/} readdir DIR2;
+		my @trimlist2=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\.fastq\.P\.qtrim\.gz$/} readdir DIR21;
+		$self->{trimfiles}="-1 ".$TrinityOutDir."".join(','.$TrinityOutDir,sort(@trimlist1))." -2 ".$TrinityOutDir."".join(','.$TrinityOutDir,sort(@trimlist2))." ";
+
+		close DIR2;
+		close DIR21;
 	}
-	if (scalar(@trimlist1)>0 and scalar(@trimlist2)==0){
-		$self->{trimfiles}="-U ".$TrinityOutDir."".join(','.$TrinityOutDir,@trimlist1)." ";
-		$self->{clip}="/home/ajosselin/work/data/TruSeq3-SE.fa";
+	if (scalar(@list1)>0 and scalar(@list2)==0){
+	#if (scalar(@trimlist1)>0 and scalar(@trimlist2)==0){
+		my $dossier22 = $TrinityOutDir;
+		#my $dossier23= $TrinityOutDir;
+		opendir DIR22 , $dossier22;
+		#opendir DIR23, $dossier23;
+		my @trimlist12=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_1\.fastq\.qtrim\.fq$/} readdir DIR22;
+		#my @trimlist22=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_2\.fastq\.qtrim\.fq$/} readdir DIR23;
+		$self->{trimfiles}="-U ".$TrinityOutDir."".join(','.$TrinityOutDir,@trimlist12)." ";
 	}
-	close DIR2;
+	#close DIR2;
 
 	open(CMDBOWTIE_2,">$dir/$file/3_evalAssembly_Bowtie2.sh");
 	printf(CMDBOWTIE_2 "#!/bin/bash\n");
@@ -307,47 +344,104 @@ sub pipeline{
 	#system("qsub","$dir/$file/5_prepref.sh");
 
 	###########################################################################################
-	### 6/ estimation de l'abondance RSEM
+	### 6/ estimation de l'abondance RSEM                                                           ##### arevoir pour le single end et le paired end !!!
+
 	
-	#my $dossier3 = $TrinityOutDir;
-	#opendir DIR3 , $dossier3;
-	#my @trimlistfull=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*_\d\..*\.qtrim\.fq$/} readdir DIR3;
-	my $lengthlist = scalar(@fulllist);
-	$self->{samples}= "(toto ".$TrinityOutDir."".join('.qtrim.fq '.$TrinityOutDir,@fulllist).".qtrim.fq)" ;
-	#close DIR3;
+	if (scalar(@list1)>0 and scalar(@list2)>0){
+		print join ("\t",@list1)."\n";
+		my $mylist = join ("\t",@list1);
 
-	my $RSEMoutdir=$TrinityOutDir."RSEM/";
+		$mylist =~ s/_1.fastq//g;
+		print $mylist."\n";
+		@Mylist= split (/\t/,$mylist);
+		print join ("***",@Mylist)."\n";
 
-	open(CMDESTIMATE_AB,">$dir/$file/6_estimateAbundance_RSEM.sh");
-	printf(CMDESTIMATE_AB "#!/bin/bash\n");
-	printf(CMDESTIMATE_AB "#\$ -N e6_launchRSEM_".$file."\n");
-	printf(CMDESTIMATE_AB "#\$ -cwd\n");
-	printf(CMDESTIMATE_AB "#\$ -V\n");
-	## job array of X sub-jobs
-	printf(CMDESTIMATE_AB "#\$ -t 1-".$lengthlist."\n");
-	## job require at least xxG of memory free on compute node
-	printf(CMDESTIMATE_AB "## -l mem=12G\n");
-	## job must be killed if memory exceed xxG
-	printf(CMDESTIMATE_AB "#\$ -l h_vmem=100G\n");
-	## join SGE output files (.o123 & .e123) in .o only
-	printf(CMDESTIMATE_AB "#\$ -j no\n");
-	## xx threads required for the job
-	printf(CMDESTIMATE_AB "#\$ -pe parallel_smp 16\n");
-	printf(CMDESTIMATE_AB "#\$ -M ambre-aurore.josselin\@inra.fr\n");
-	printf(CMDESTIMATE_AB "#\$ -q workq\n");
-	printf(CMDESTIMATE_AB "#\$ -m bea\n");
+		# my @optionlist=();
+		# foreach my $elt (@Mylist){
+		# 	my $var ="--left ".$TrinityOutDir."".$elt."_1.fasta.P.qtrim.gz --right ".$TrinityOutDir."".$elt."_2.fasta.P.qtrim.gz";
+		# 	push @optionlist,$var;
+		# }
 
-	printf(CMDESTIMATE_AB "#\$ -hold_jid e5_preprefRSEM_".$file."\n");
+		# print join("\n",@optionlist)."\n";		
 
-	printf(CMDESTIMATE_AB "##table of samples\n");
-	printf(CMDESTIMATE_AB "samples=".$self->{samples}."\n");
-	printf(CMDESTIMATE_AB "sample=\"\${samples[\$SGE_TASK_ID]}\"\n");
+		$self->{samples}= "(toto1 ".join(' ',@Mylist).")" ;
+		my $lengthlist0 = scalar(@Mylist);
+		print $self->{samples}."\n";
 
-	##some vars 
-	printf(CMDESTIMATE_AB "outdir='".$TrinityOutDir."RSEM/'\n");
+		my $RSEMoutdir=$TrinityOutDir."RSEM/";
 
-	printf(CMDESTIMATE_AB $pathToUtilTrinity."align_and_estimate_abundance.pl --thread_count 16 --transcripts ".$TrinityOutDir."Trinity.fasta --seqType fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix \${sample} --single \${sample}\n"); 
-	close(CMDESTIMATE_AB);
+		open(CMDESTIMATE_AB,">$dir/$file/6_estimateAbundance_RSEM.sh");
+		printf(CMDESTIMATE_AB "#!/bin/bash\n");
+		printf(CMDESTIMATE_AB "#\$ -N e6_launchRSEM_".$file."\n");
+		printf(CMDESTIMATE_AB "#\$ -cwd\n");
+		printf(CMDESTIMATE_AB "#\$ -V\n");
+		## job array of X sub-jobs
+		printf(CMDESTIMATE_AB "#\$ -t 1-".$lengthlist0."\n");
+		## job require at least xxG of memory free on compute node
+		printf(CMDESTIMATE_AB "## -l mem=12G\n");
+		## job must be killed if memory exceed xxG
+		printf(CMDESTIMATE_AB "#\$ -l h_vmem=100G\n");
+		## join SGE output files (.o123 & .e123) in .o only
+		printf(CMDESTIMATE_AB "#\$ -j no\n");
+		## xx threads required for the job
+		printf(CMDESTIMATE_AB "#\$ -pe parallel_smp 16\n");
+		printf(CMDESTIMATE_AB "#\$ -M ambre-aurore.josselin\@inra.fr\n");
+		printf(CMDESTIMATE_AB "#\$ -q workq\n");
+		printf(CMDESTIMATE_AB "#\$ -m bea\n");
+
+		printf(CMDESTIMATE_AB "#\$ -hold_jid e5_preprefRSEM_".$file."\n");
+
+		printf(CMDESTIMATE_AB "##table of samples\n");
+		printf(CMDESTIMATE_AB "samples=".$self->{samples}."\n");
+		printf(CMDESTIMATE_AB "sample=\"\${samples[\$SGE_TASK_ID]}\"\n");
+
+		##some vars 
+		printf(CMDESTIMATE_AB "outdir='".$TrinityOutDir."RSEM/'\n");
+
+		printf(CMDESTIMATE_AB $pathToUtilTrinity."align_and_estimate_abundance.pl --thread_count 16 --transcripts ".$TrinityOutDir."Trinity.fasta --seqType fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix ".$TrinityOutDir."\${sample}.fastq.P.qtrim.gz --left  ".$TrinityOutDir."\${sample}_1.fastq.P.qtrim.gz --right ".$TrinityOutDir."\${sample}_2.fastq.P.qtrim.gz\n"); 
+		close(CMDESTIMATE_AB);
+
+	}
+	if (scalar(@list1)>0 and scalar(@list2)==0){
+
+		#my $lengthlist = scalar(@fulllist);
+		$self->{samples}= "(toto2 ".$TrinityOutDir."".join('.qtrim.fq '.$TrinityOutDir,@fulllist).".qtrim.fq)" ;
+
+		my $RSEMoutdir=$TrinityOutDir."RSEM/";
+
+		open(CMDESTIMATE_AB,">$dir/$file/6_estimateAbundance_RSEM.sh");
+		printf(CMDESTIMATE_AB "#!/bin/bash\n");
+		printf(CMDESTIMATE_AB "#\$ -N e6_launchRSEM_".$file."\n");
+		printf(CMDESTIMATE_AB "#\$ -cwd\n");
+		printf(CMDESTIMATE_AB "#\$ -V\n");
+		## job array of X sub-jobs
+		printf(CMDESTIMATE_AB "#\$ -t 1-".$lengthlist."\n");
+		## job require at least xxG of memory free on compute node
+		printf(CMDESTIMATE_AB "## -l mem=12G\n");
+		## job must be killed if memory exceed xxG
+		printf(CMDESTIMATE_AB "#\$ -l h_vmem=100G\n");
+		## join SGE output files (.o123 & .e123) in .o only
+		printf(CMDESTIMATE_AB "#\$ -j no\n");
+		## xx threads required for the job
+		printf(CMDESTIMATE_AB "#\$ -pe parallel_smp 16\n");
+		printf(CMDESTIMATE_AB "#\$ -M ambre-aurore.josselin\@inra.fr\n");
+		printf(CMDESTIMATE_AB "#\$ -q workq\n");
+		printf(CMDESTIMATE_AB "#\$ -m bea\n");
+
+		printf(CMDESTIMATE_AB "#\$ -hold_jid e5_preprefRSEM_".$file."\n");
+
+		printf(CMDESTIMATE_AB "##table of samples\n");
+		printf(CMDESTIMATE_AB "samples=".$self->{samples}."\n");
+		printf(CMDESTIMATE_AB "sample=\"\${samples[\$SGE_TASK_ID]}\"\n");
+
+		##some vars 
+		printf(CMDESTIMATE_AB "outdir='".$TrinityOutDir."RSEM/'\n");
+
+		printf(CMDESTIMATE_AB $pathToUtilTrinity."align_and_estimate_abundance.pl --thread_count 16 --transcripts ".$TrinityOutDir."Trinity.fasta --seqType fq --est_method RSEM --aln_method bowtie --trinity_mode --output_prefix \${sample} --single \${sample}\n"); 
+		close(CMDESTIMATE_AB);
+
+	}
+
 
 	#system("qsub","$dir/$file/6_estimateAbundance_RSEM.sh");
 
@@ -358,7 +452,14 @@ sub pipeline{
 	# my @resultRSEMlist=grep{$_ ne '.' and $_ ne '..' and $_=~ m/^.*\.genes\.results$/} readdir DIR4;
 	# my $lengthlist2 = scalar(@resultRSEMlist);
 	
-	$self->{RSEMresults}= $TrinityOutDir."".join('.qtrim.fq.genes.results '.$TrinityOutDir,@fulllist).".qtrim.fq.genes.results\n" ;
+	if (scalar(@list1)>0 and scalar(@list2)>0){
+		#print "C'EST LAAAAAAAAAAAAAAAAAAAAAAAAAAAAA !!\n";
+		$self->{RSEMresults}= $TrinityOutDir."".join('.fastq.P.qtrim.gz.genes.results '.$TrinityOutDir,@Mylist).".fastq.P.qtrim.gz.genes.results\n" ;		
+	}
+	if (scalar(@list1)>0 and scalar(@list2)==0){
+		#print "C'EST ICIIIIIIIIIIIIIIIIIIIIIIIIIIIII !!\n";
+		$self->{RSEMresults}= $TrinityOutDir."".join('.qtrim.fq.genes.results '.$TrinityOutDir,@fulllist).".qtrim.fq.genes.results\n" ;
+	}	
 	#print $self->{RSEMresults}."\n";
 	#close DIR4;
 
@@ -368,7 +469,7 @@ sub pipeline{
 	printf(CMDMATRIX "#\$ -cwd\n");
 	printf(CMDMATRIX "#\$ -V\n");
 	## job array of X sub-jobs
-	printf(CMDMATRIX "## -t 1-".$lengthlist."\n");
+	#printf(CMDMATRIX "## -t 1-".$lengthlist."\n");
 	## job require at least xxG of memory free on compute node
 	printf(CMDMATRIX "## -l mem=12G\n");
 	## job must be killed if memory exceed xxG
@@ -424,7 +525,7 @@ sub pipeline{
 
 	close(CMDcompPERsamples);
 
-	system("qsub","$dir/$file/8_compareReplicatesInSamples.sh");
+	#system("qsub","$dir/$file/8_compareReplicatesInSamples.sh");
 
 	###########################################################################################
 	### 9/ comparaison des replicats entre les echantillons
@@ -455,7 +556,7 @@ sub pipeline{
 
 	close(CMDcompBETWEENsamples);
 
-	system("qsub","$dir/$file/9_compareReplicatesBetweenSamples.sh");
+	#system("qsub","$dir/$file/9_compareReplicatesBetweenSamples.sh");
 
 	###########################################################################################
 	### 10/ comparaison des replicat en composantes principales 
@@ -485,7 +586,7 @@ sub pipeline{
 
 	close (CMDcompCOMPPRINCIPAL);
 
-	system("qsub","$dir/$file/10_compareReplicatesCompPrincipal.sh");
+	#system("qsub","$dir/$file/10_compareReplicatesCompPrincipal.sh");
 
 	###########################################################################################
 	### 11/ Expression differentielle
@@ -519,7 +620,7 @@ sub pipeline{
 
 	close(CMDDE);
 
-	system("qsub","$dir/$file/11_DE.sh");
+	#system("qsub","$dir/$file/11_DE.sh");
 
 	###########################################################################################
 	# open(CMD1,">$dir/$file/mkdir.sh");
@@ -610,7 +711,7 @@ sub pipeline{
 
 	close(CMDAnalysisDE);
 
-	system("qsub","$dir/$file/12_DEAnalysis.sh"),
+	#system("qsub","$dir/$file/12_DEAnalysis.sh"),
 }
 
 
